@@ -1,0 +1,79 @@
+---
+- hosts: grupo03
+  #gather_facts: true
+  become: true
+  
+  tasks:
+
+    - name: Reunindo e mostrando 'facts' do sistema
+      ansible.builtin.debug:
+        var: ansible_facts
+
+    - name: Identificando o sistema operacional
+      ansible.builtin.debug:
+        # msg: O sistema em uso é o {{ ansible_os_family }}
+        msg: O sistema em uso é o {{ansible_facts['os_family']}}
+
+    - name: Atualizando o repositório para {{ansible_facts['os_family']}}
+      ignore_errors: true
+      ansible.builtin.apt: 
+        name: '*'
+        state: latest
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Fazendo upgrade do repositório para {{ansible_facts['os_family']}}
+      ansible.builtin.apt:
+        upgrade: dist
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Instalando 'software-properties-common' para {{ansible_facts['os_family']}}
+      ansible.builtin.apt:
+        pkg:
+          - software-properties-common
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Instalando lista de pacotes para {{ansible_facts['os_family']}}
+      ansible.builtin.apt:
+        pkg:
+          - vim
+          - htop
+          - git
+          - wget
+          - snap
+          - gnome-tweaks
+          - neofetch
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Instalando virtualenv para {{ansible_facts['os_family']}}
+      ignore_errors: true
+      ansible.builtin.apt:
+        pkg:
+          - virtualenv
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Adicionando dependências python para {{ansible_facts['os_family']}}
+      ansible.builtin.apt:
+        pkg:
+          - python3.11-dev
+          - python3-gdal
+          - python3-pip
+          - python3-ldap
+      when: ansible_facts['os_family'] == "Debian"
+ 
+    - name: Executando a limpeza com Autoremove para {{ansible_facts['os_family']}}
+      ansible.builtin.apt:
+        autoremove: true
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Executando a limpeza com Autoclean para {{ansible_facts['os_family']}}
+      ansible.builtin.apt:
+        autoclean: true
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Mostrando uma variável específica
+      ansible.builtin.debug:
+        msg: "{{ ansible_facts['device_links']['ids']['sda1'] }}"
+    - name: Mostrando outra variável específica
+      ansible.builtin.debug:
+        msg: "{{ ansible_device_links.ids.sda }}"
+...

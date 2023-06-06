@@ -1,0 +1,15 @@
+---
+- name: Atualizando o repositório na primeira máquina de cada grupo
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Atualizando repositório
+      apt:
+        name: python3.11-dev
+        state: latest
+      run_once: true
+      when: inventory_hostname == groups[group_name][0]
+      vars:
+        group_name: "{{ group_names[0] }}"
+...

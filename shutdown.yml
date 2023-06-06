@@ -1,0 +1,9 @@
+---
+- hosts: grupo03
+  become: true
+  gather_facts: false
+
+  tasks:
+  - name: Desligando todos os servidores do grupo03
+    community.general.shutdown:
+...

@@ -1,0 +1,10 @@
+---
+- hosts: grupo03
+  become: true
+  gather_facts: false
+
+  tasks:
+  - name: Reinicializando todos os servidores (grupo03)
+    ansible.builtin.reboot:
+    
+...
