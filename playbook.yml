@@ -1,7 +1,9 @@
 ---
-- hosts: grupo03
-  #gather_facts: true
+- name: Updater
+  hosts: grupo03
   become: true
+  vars:
+    option: "no"
   
   tasks:
 
@@ -73,7 +75,10 @@
     - name: Mostrando uma variável específica
       ansible.builtin.debug:
         msg: "{{ ansible_facts['device_links']['ids']['sda1'] }}"
+      when: "option == 'yes'"
+
     - name: Mostrando outra variável específica
       ansible.builtin.debug:
         msg: "{{ ansible_device_links.ids.sda }}"
+      when: "option == 'yes'"
 ...
