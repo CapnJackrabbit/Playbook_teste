@@ -1,0 +1,10 @@
+---
+- name: Utilizando um arquivo de variáveis
+  hosts: grupo03
+  vars_files: /home/david/Documentos/Playbooks/Vars_files/var_file.yml
+
+  tasks:
+    - name: Instalando aplicativos
+      ansible.builtin.apt:
+        name: "{{ packages }}"
+        state: latest
